@@ -1,5 +1,2 @@
 require "fluent_flux/version"
-
-module FluentFlux
-  # Your code goes here...
-end
+require "fluent_flux/flux"
