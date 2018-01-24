@@ -1,7 +1,7 @@
 require "fluent_flux"
 
 RSpec.describe "Flux tests" do
-  describe "start - " do
+  describe "begin_with - " do
     it "should create instance which can be called with given function and one argument" do
       add10 = -> (value) { value + 10 }
       actual_start = Flux.begin_with(add10, 5)
