@@ -17,22 +17,6 @@ RSpec.describe "Flux tests" do
         expect(actual).to eq(expected)
       end
       
-      it "with one argument" do
-        add10 = -> (value) { value + 10 }
-
-        actual = method.(add10, 5).call
-        
-        expect(actual).to eq(15)
-      end
-      
-      it "with two arguments" do
-        add = -> (a, b) { a + b }
-
-        actual = method.(add, 5, 2).call
-        
-        expect(actual).to eq(7)
-      end
-      
       it "with four arguments" do
         calculate_and_print = -> (a, b, c, suffix) { "#{a * (b + c) } #{suffix}" }
         

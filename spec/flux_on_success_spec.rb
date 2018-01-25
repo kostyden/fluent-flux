@@ -1,12 +1,12 @@
 require "fluent_flux"
 
 RSpec.describe "Flux tests" do
-  describe "on_success - should pass successful result as last argument to given function" do
+  describe "on_success - should pass value of successful result as last argument to given function" do
     let(:sum) { -> (a, b) { FluxResult.success(a + b) }}
     let(:flux_success_76) { Flux.try_with(sum, 24, 52) }
 
     it "without arguments" do
-      try_multiply_by_2 = -> (result) { FluxResult.success(result.value * 2) }
+      try_multiply_by_2 = -> (value) { FluxResult.success(value * 2) }
 
       actual = flux_success_76.on_success(try_multiply_by_2).call
   
@@ -14,7 +14,7 @@ RSpec.describe "Flux tests" do
     end
 
     it "with two argument" do
-      try_calculate = -> (a, b, result) { FluxResult.failure(a + b * result.value) }
+      try_calculate = -> (a, b, value) { FluxResult.failure(a + b * value) }
 
       actual = flux_success_76.on_success(try_calculate, 5, 10).call
   
@@ -24,7 +24,7 @@ RSpec.describe "Flux tests" do
 
   it "on_success - should return failed result of current method" do
     failing_sum = -> (a, b) { FluxResult.failure(a + b) }
-    save_successful_result = -> (result) { FluxResult.success("should not be called") }
+    save_successful_result = -> (value) { FluxResult.success("should not be called") }
 
     actual = Flux.try_with(failing_sum, 25, 89).on_success(save_successful_result).call
 

@@ -10,16 +10,20 @@ class Flux
   end
   
   def then(function, *args)
-    result = @current.call
-    args << result
-    Flux.begin_with(function, *args)
+    args << @current.call
+    Flux.with(function, *args)
   end
 
   def on_success(function, *args)
     result = @current.call
     return Flux.with(-> { result }) unless result.success?
 
-    args << result
+    args << result.value
+    Flux.with(function, *args)
+  end
+
+  def always(function, *args)
+    args << @current.call.value
     Flux.with(function, *args)
   end
   
@@ -31,4 +35,6 @@ class Flux
 
   singleton_class.send(:alias_method, :with, :begin_with)
   singleton_class.send(:alias_method, :try_with, :begin_with)
+
+  alias_method(:try, :then)
 end
