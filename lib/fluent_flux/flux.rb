@@ -29,7 +29,9 @@ class Flux
   end
 
   def always(function, *args)
-    args << @current.call.value
+    result = @current.call
+    value = result.is_a?(FluxResult) ? result.value : result
+    args << value
     Flux.with(function, *args)
   end
   

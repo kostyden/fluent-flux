@@ -27,5 +27,18 @@ RSpec.describe "Flux tests" do
 
       expect(actual).to eq("result = 160")    
     end
+
+    it "when result is not a FluxResult" do
+      successful_add = -> (a, b) { FluxResult.success(a + b) }   
+      multiply_by_7 = -> (value) { value * 7 }   
+      format_result = -> (value) { "result = #{value}" }
+
+      actual = Flux.try_with(successful_add, 1, 2)
+                   .on_success(multiply_by_7)
+                   .always(format_result)
+                   .call
+
+      expect(actual).to eq("result = 21")    
+    end
   end
 end
