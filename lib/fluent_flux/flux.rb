@@ -14,9 +14,10 @@ class Flux
     Flux.with(function, *args)
   end
 
-  def success_when(predicate)
-    value = @current.call
-    result = predicate.call(value) ? FluxResult.success(value) : FluxResult.failure(value)
+  def success_when(predicate, *args)
+    value = @current.call 
+    args << value
+    result = predicate.call(*args) ? FluxResult.success(value) : FluxResult.failure(value)
     Flux.with(-> { result })
   end
 
