@@ -23,7 +23,7 @@ class Flux
 
   def on_success(function, *args)
     result = @current.call
-    return Flux.with(-> { result }) unless result.success?
+    return Flux.with(-> { result }) unless result.is_a?(FluxResult) && result.success?
 
     args << result.value
     Flux.with(function, *args)
@@ -31,7 +31,7 @@ class Flux
 
   def on_failure(function, *args)
     result = @current.call
-    return Flux.with(-> { result }) unless result.failure?
+    return Flux.with(-> { result }) unless result.is_a?(FluxResult) && result.failure?
 
     args << result.value
     Flux.with(function, *args)

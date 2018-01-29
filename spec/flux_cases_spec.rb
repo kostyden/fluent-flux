@@ -19,4 +19,30 @@ RSpec.describe "Flux tests" do
 
     expect(actual).to eq(expected)
   end
+
+  it "when on_failed called after on_success during successful path" do
+    above_limit = -> (limit, salary) { salary > limit }
+    reduce = -> (amount, salary) { salary - amount }
+
+    actual = Flux.begin_with(load_base_salary, 10.0)
+                 .success_when(above_limit, 900)
+                 .on_success(reduce, 1000.0)
+                 .on_failure(reduce, 20)
+                 .call
+
+    expect(actual).to eq(0)
+  end
+
+  it "when on_success called after on_failure during failed path" do
+    above_limit = -> (limit, salary) { salary > limit }
+    reduce = -> (amount, salary) { salary - amount }
+
+    actual = Flux.begin_with(load_base_salary, 5.0)
+                 .success_when(above_limit, 2000)
+                 .on_failure(reduce, 20)
+                 .on_success(reduce, 1000)
+                 .call
+
+    expect(actual).to eq(480)
+  end
 end
