@@ -29,6 +29,14 @@ class Flux
     Flux.with(function, *args)
   end
 
+  def on_failure(function, *args)
+    result = @current.call
+    return Flux.with(-> { result }) unless result.failure?
+
+    args << result.value
+    Flux.with(function, *args)
+  end
+
   def always(function, *args)
     result = @current.call
     value = result.is_a?(FluxResult) ? result.value : result

@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    fluent_flux (0.1.0)
+    fluent_flux (0.2.0)
 
 GEM
   remote: https://rubygems.org/
